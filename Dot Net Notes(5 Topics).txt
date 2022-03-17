@@ -1,0 +1,475 @@
+
+
+Casting:
+---------------------------------
+Type casting is nothing but when we assign a value of one data type to another type.
+Typecast is a way of changing an object from one data type to the next. 
+It is used in computer programming to ensure a function handles the variables correctly. 
+A typecast example is the transformation of an integer into a string.
+
+In C#, there are two types of casting:
+
+Implicit Casting (automatically) - converting a smaller type to a larger type size
+char -> int -> long -> float -> double
+
+int myInt = 9;
+double myDouble = myInt; 
+---------------------------
+
+using System;
+
+namespace Implicit_type_Casting
+{
+    class Program
+    {
+               //Main Method
+        public static void Main(string[] args)
+        {
+
+            int i = 57;
+               //Automatic type conversion
+            long l = i;
+               //Automatic type conversion
+            float f = l;
+               //Displaying Result
+            Console.WriteLine("Int value:" + i);
+            Console.WriteLine("Long value:" + l);
+            Console.WriteLine("Float value:" + f);
+
+            Console.ReadLine();
+        }
+        
+    }
+}
+-----------------------------------------------------------
+
+Explicit Casting (manually) - converting a larger type to a smaller size type.
+Explicit casting must be done manually by placing the type in parentheses in front of the value
+double -> float -> long -> int -> char
+
+double myDouble = 9.78;
+int myInt = (int) myDouble;
+--------------------------------------
+
+using System;
+
+namespace Explicit_type_Casting
+{
+    class Program
+    {
+               //Main Method
+        public static void Main(string[] args)
+        {
+            double d = 765.12;
+                 //Explicit type conversion
+            int i = (int)d;
+                 //Display Result
+            Console.WriteLine("Value of i is:" + i);
+            Console.ReadLine();
+        }
+    }
+}
+
+
+Constructors:
+------------------------------------------------
+A constructor is a special method of the class which gets automatically invoked 
+whenever an instance of the class is created. 
+A constructor also contains the collection of instructions that are executed at the time of Object creation. 
+It is used to assign initial values to the data members of the same class. 
+
+Important points to Remember About Constructors:
+------------------------------------------------
+=> Constructor of a class must have the same name as the class name in which it resides.
+=> A constructor can not be abstract, final, and Synchronized.
+=> Within a class, you can create only one static constructor.
+=> A constructor doesn’t have any return type, not even void.
+=> A static constructor cannot be a parameterized constructor.
+=> A class can have any number of constructors.
+=> Access modifiers can be used in constructor declaration to control its access i.e 
+which other class can call the constructor. 
+
+Types of Constructors:
+----------------------
+1.Default Constructor:
+
+A constructor with no parameters is called a default constructor. 
+A default constructor has every instance of the class to be initialized to the same values. 
+The default constructor initializes all numeric fields to zero and all string and object fields to null inside a class.
+
+using System;
+
+namespace Default_Constructor
+{
+    class Program
+    {
+        class DC
+        {
+            int num;
+            string name;
+              //this would be invoked while the object of that class is created
+            DC()
+            {
+                Console.WriteLine("Constructor Called");
+            }
+
+                  //Main method
+            public static void Main()
+            {
+                  //This would invoke default constructor.
+                DC dc1 = new DC();
+                  //Default constructor provides the default values to the int and object as 0,null
+                  //It gives warning because fields are not assign.
+                Console.WriteLine(dc1.name);
+                Console.WriteLine(dc1.num);
+
+                Console.ReadLine();
+            }
+            
+        }
+        
+    }
+}
+-------------------------------------------------------------------------------------------------------
+2.Parameterized Constructor:
+-----------------------------
+A constructor having at least one parameter is called as parameterized constructor. 
+It can initialize each instance of the class to different values.
+
+using System;
+
+namespace Parameterized_Constructor
+{
+    class PC
+    {
+        string name;
+        int id;
+           //Parameterized constructor would initialized data members with the values of passed arguments
+           //while object of that class created.
+        PC(string name,int id)
+        {
+            this.name = name;
+            this.id = id;
+        }
+        public static void Main()
+        {
+            //This will invoke Parameterized Constructor.
+            PC pc1 = new PC("Sumanya", 1);
+            Console.WriteLine("Name=" + pc1.name + 
+                "Id =" + pc1.id) ;
+
+            Console.ReadLine();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------
+3.Copy Constructor:
+-------------------
+This constructor creates an object by copying variables from another object. 
+Its main use is to initialize a new instance to the values of an existing instance. 
+
+using System;
+
+namespace Copy_Constructor
+{
+    class CC
+    {
+        private string month;
+        private int year;
+             
+           //Declaring Copy Constructor
+        public CC(CC s)
+        {
+            month = s.month;
+            year = s.year;
+        }
+             Instance constructor
+        public CC(string month, int year )
+        {
+            this.month = month;
+            this.year = year;
+        }
+            //Get details of CC
+        public string Details
+        {
+            get
+            {
+                return "Month: " + month.ToString() + "\nYear:" + year.ToString();
+            }
+        }
+        public static void Main()
+        {
+              //Create a new CC object
+            CC cc1 = new CC("April", 1996);
+              //Here is cc1 details is copied to cc2
+            CC cc2 = new CC(cc1);
+            Console.WriteLine(cc2.Details);
+            Console.ReadLine();
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------
+
+4.Private Constructor:
+----------------------
+If a constructor is created with private specifier is known as Private Constructor. 
+It is not possible for other classes to derive from this class and also it’s not possible to create an instance of this class. 
+
+Points To Remember :  
+---------------------
+It is the implementation of a singleton class pattern.
+use private constructor when we have only static members.
+Using private constructor, prevents the creation of the instances of that class.
+
+using System;
+
+namespace Private_Constructor
+{
+    public class PC
+    {
+            //Declare private Constructor
+        private PC()
+        {
+        }
+            //Declare static variable field
+        public static int count_pc;
+            //declare static method
+        public static int pc_Count()
+        {
+            return ++count_pc;
+        }
+    
+        public static void Main()
+        {
+             //in method no need of assigning obj
+            PC.count_pc = 99;
+             //We can Access without any instance of class
+            PC.pc_Count();
+
+            Console.WriteLine(PC.count_pc);
+            PC.pc_Count();
+            Console.WriteLine(PC.count_pc);
+
+            Console.ReadLine();
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------
+5.Static Constructor:
+----------------------
+Static Constructor has to be invoked only once in the class and it has been invoked during the creation of the first reference to a static member in the class. 
+A static constructor is initialized static fields or data of the class and to be executed only once. 
+
+Points To Remember :  
+----------------------
+It can’t be called directly.
+When it is executing then the user has no control.
+It does not take access modifiers or any parameters.
+It is called automatically to initialize the class before the first instance created.
+
+using System;
+
+namespace Static_Constructor
+{
+    class SC
+    {
+              //It is invoked before the first instance constructor is run
+        static SC()
+        {
+              //The following statement produces the first line of output,
+              //and the line occurs only once.
+            Console.WriteLine("Static Constructor");
+            Console.WriteLine("==================");
+        }
+              //Instance Constructor
+        public SC(int i)
+        {
+            Console.WriteLine("Instance Constructor" + i);
+        }
+             // Instance Method
+        public string SC_details(string name,int id)
+        {
+            return "Name:" + name + " id:" + id;
+        }
+        public static void Main()
+        {
+                  //Here both static and instance constructors are invoked
+                  // for first instance
+            SC obj = new SC(1);
+            Console.WriteLine(obj.SC_details("Sumanya",1));
+
+                   //here nly instance constructr will be invoked
+            SC obj1 = new SC(2);
+            Console.WriteLine(obj1.SC_details("Parsha", 2));
+            Console.ReadLine();
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Destructor:
+-----------
+It is used to destroy objects of class when the scope of an object ends. It has the same name as the class and starts with a tilde ~ .
+
+Important Points:
+------------------
+A Destructor is unique to its class i.e. there cannot be more than one destructor in a class.
+A Destructor has no return type and has exactly the same name as the class name (Including the same case).
+It is distinguished apart from a constructor because of the Tilde symbol (~) prefixed to its name.
+A Destructor does not accept any parameters and modifiers.
+It cannot be defined in Structures. It is only used with classes.
+It cannot be overloaded or inherited.
+It is called when the program exits.
+Internally, Destructor called the Finalize method on the base class of object.
+
+using System;
+
+namespace Destructor
+{
+    class Complex
+    {
+               //Class members, private by default
+            int real, img;
+
+               //Defining the constructor
+            public Complex()
+            {
+                real = 0;
+                img = 0;
+            }
+
+                //Setvalue method sets value of real and img
+            public void SetValue(int r, int i)
+            {
+                real = r;
+                img = i;
+            }
+
+                 //Displayvalue displays values of real and img
+            public void DisplayValue()
+            {
+                Console.WriteLine("Real = " + real);
+                Console.WriteLine("Imaginary = " + img);
+            }
+                  
+                  //Defining the destructor for class complex
+            ~Complex()
+            {
+                Console.WriteLine("Destructor was called");
+            }
+    }
+                //Driver class
+        class Program
+        {
+            public static void Main(string[] args)
+            {
+                 //Creating an instance of class complex C invokes constructor
+                Complex C = new Complex();
+
+                 // Calling SetValue method using instance C Setting values of 
+                // real to 2 and img to 3
+                C.SetValue(2, 3);
+
+                // Displaying values of real and imaginary parts
+                C.DisplayValue();
+                
+               // Instance is no longer needed Destructor will be called
+                Console.ReadLine();
+            }
+        }
+}
+
+Explanation: In the above example, the class consists of a constructor Complex(), 
+a SetValue method to set value of the complex class’ instance, 
+a DisplayValue method to display the value of the instance and a Destructor 
+~Complex() to destroy the object when the instance is no longer required, 
+it prints the message “Destructor was called”, which depends on the programmer what message he/she wants to display or it can also be left blank.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Sealed Class:
+-------------
+Sealed classes are used to restrict the users from inheriting the class. 
+A class can be sealed by using the sealed keyword. 
+The keyword tells the compiler that the class is sealed, and therefore, cannot be extended. 
+No class can be derived from a sealed class.
+
+A method can also be sealed, and in that case, the method cannot be overridden. 
+However, a method can be sealed in the classes in which they have been inherited. 
+If you want to declare a method as sealed, then it has to be declared as virtual in its base class.
+
+using System;
+
+namespace Sealed_Class
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+              //Creating an object of sealed class
+            SealedClass slc = new SealedClass();
+
+              //Performing Addition operation
+            int total = slc.Add(10, 30);
+            Console.WriteLine("Total = " + total.ToString());
+
+            Console.ReadLine();
+        }
+    }
+        //Sealed class
+    sealed class SealedClass
+    {
+         //Calling Function
+        public int Add(int a,int b)
+        {
+            return a + b;
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------
+
+Base Keyword:
+-------------
+The base keyword is used to access members of the base class from within a derived class:
+Call a method on the base class that has been overridden by another method.
+Specify which base-class constructor should be called when creating instances of the derived class.
+A base class access is permitted only in a constructor, an instance method, or an instance property accessor.
+It is an error to use the base keyword from within a static method.
+In this example, both the base class, Person, and the derived class, Employee, have a method named Getinfo. 
+By using the base keyword, it is possible to call the Getinfo method on the base class, from within the derived class.
+
+using System;
+
+namespace Base_keyword
+{
+    public class Person
+    {
+        protected string ssn = "444-55-666";
+        protected string name = "Sumanya P";
+
+        public virtual void GetInfo()
+        {
+            Console.WriteLine("Name: {0}", name);
+            Console.WriteLine("SSN: {0}", ssn);
+        }
+    }
+
+    class Employee : Person
+    {
+        public string id = "35";
+        public override void GetInfo()
+        {
+             //Calling the base class GetInfo method
+            base.GetInfo();
+            Console.WriteLine("Employee ID: {0}", id);
+        }
+    }
+    class TestClass
+    {
+        static void Main()
+        {
+            Employee E = new Employee();
+            E.GetInfo();
+            Console.ReadLine();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------
