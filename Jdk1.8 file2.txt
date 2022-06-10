@@ -1,0 +1,255 @@
+Example-1
+-----------------------
+//we want to convert Array to List.
+//We manually have to traverse the array and add the element into list one by one.
+//The array size is fix but the arraylist size increase dynamically.
+package Wednesday;
+import java.util.*;
+public class ArrayToListDemo
+{
+public static void main(String[] args)
+{
+	//array
+	String arr[]= {"Shubham","Geetanjali","Trupti","Ajay"};
+	System.out.println("the array is :"+Arrays.toString(arr));
+//Convert array to List
+	ArrayList<String> list=new ArrayList<String>();
+	for(String str:arr)
+	{
+		list.add(str);
+	}
+	System.out.println("The list is :"+list);
+}
+}
+--------------------------------------------------------------------------------------------------
+Example-2
+---------------------
+//to convert List to Array 
+package Wednesday;
+import java.util.*;
+public class ListToArrayDemo
+{
+public static void main(String[] args)
+{
+ArrayList<String> list=new ArrayList<String>();
+list.add("apple");
+list.add("orange");
+list.add("grapes");
+list.add("strawberry");
+System.out.println("the list is :"+list);
+//to convert List to Array we use toArray()
+String arr[]=list.toArray(new String[list.size()]);
+System.out.println("Print the array :"+Arrays.toString(arr));
+}
+}
+---------------------------------------------------------------------------------
+Properties class
+-----------------------------
+1)The properties object contains key and value pair both as string.
+2)It belongs to java.util.Properties class .It is a subclass of HashTable.
+3)We get the properties value based on the properties key.
+4)The advantage is we neednot to re-compile when the value in the properties files is changed.
+5)It is mostly useful during migration of project from one database to another database (Example:Oracle9 to Oracle11)
+
+
+Example :- 
+database setup
+----------------------------
+db.properties
+----------------------------
+user=system
+password=1234
+Driver=oracle.jdbc.driver.OracleDriver
+connection=jdbc:oracle:thin:@localhost:1521:xe
+
+Server.Port=8090
+--------------------------------------------------------------------------
+Example-3
+-------------------
+package Wednesday;
+import java.util.*;
+import java.io.*;
+public class PropertiesDemo
+{
+public static void main(String[] args)throws Exception
+{
+FileReader fr=new FileReader("db.properties");
+Properties p=new Properties();
+p.load(fr);
+
+System.out.println("the user name is :"+p.getProperty("user"));
+System.out.println("the password is :"+p.getProperty("password"));
+System.out.println("the Driver is :"+p.getProperty("Driver"));
+System.out.println("the connection is :"+p.getProperty("connection"));
+//System.out.println("the data base is :"+p.getProperty("Data"));
+}
+}
+------------------------------------------------------------------------------
+We have 2 interfaces to sort the data.
+1)Comparable interface:- 
+It provides a single sorting sequence only.We can sort a single element only.
+In this we have a abstract method
+public int compareTo(Student obj);//This will compare the single element of the object which may be a rollno,name or age.
+--------------------------------------------------------------------------------------------------
+2)Comparator interface.
+We can sort a object of a class.
+In this we have a abstract method 
+public int compare(Object ob1,Object ob2);//This will compare the first object with the second object.
+----------------------------------------------------------------------------------------------------------------
+Example-4
+---------------------
+package Wednesday;
+
+public class Student implements Comparable<Student>
+{
+	int rollno,age;
+	String name;
+
+	public Student(int rollno, int age, String name) 
+	{
+		super();
+		this.rollno = rollno;
+		this.age = age;
+		this.name = name;
+	}
+
+	@Override
+	public int compareTo(Student obj) 
+	{
+		if(age==obj.age)
+		return 0;
+		else if(age>obj.age)
+			return 1;
+		else
+			return -1;
+	}
+
+}
+---------------------------------------------------------
+package Wednesday;
+import java.util.*;
+public class ComparableDemo 
+{
+public static void main(String[] args) 
+{
+ArrayList<Student> al=new ArrayList<Student>();
+al.add(new Student(101,21,"Trupti"));
+al.add(new Student(102,24,"Shubam"));
+al.add(new Student(103,22,"Ajay"));
+al.add(new Student(104,23,"Madhu"));
+Collections.sort(al);
+for(Student st:al)
+	System.out.println(st.age+"  "+st.rollno+"   "+st.name);
+}
+}
+-------------------------------------------------------------------------------------------------------
+syntax :-
+-------------
+public int compare(Object o1, Object o2)
+	{
+Employee ob1=(Employee) o1;
+Employee ob2=(Employee) o2;
+if(ob1.age==ob2.age)		
+return 0;
+else if(ob1.age > ob2.age)
+	return 1;
+else
+	return -1;
+	}
+------------------------------------------------------------------------------
+compare() has a logic to compare the int values.
+if the 1st object age is greater than the second object age it will return (+) value.
+if the 1st object age is less than the second object age it will return (-) value.
+if the 1st object age is equal than the second object age it will return (0) value.
+we have age 23,22,21 .if first age is geater then the second the it return (+) and the values are swapped.
+we have age 22,23,21 .if first age is geater then the second the it return (+) and the values are swapped.
+we have age 22,21,23 .if first age is geater then the second the it return (+) and the values are swapped.
+we have age 21,22,23 .if first age is geater then the second the it return (+) and the values are swapped.
+------------------------------------------------------------------------------------------------------------------------------
+Example-5
+----------------------
+package Wednesday;
+public class Employee 
+{
+int empno,age;
+String name;
+public Employee(int empno, int age, String name) {
+	super();
+	this.empno = empno;
+	this.age = age;
+	this.name = name;
+}
+
+}
+----------------------------------------------------------------
+package Wednesday;
+import java.util.*;
+public class EmployeeAge implements Comparator 
+{
+
+	@Override
+	public int compare(Object o1, Object o2)
+	{
+Employee ob1=(Employee) o1;
+Employee ob2=(Employee) o2;
+if(ob1.age==ob2.age)		
+return 0;
+else if(ob1.age > ob2.age)
+	return 1;
+else
+	return -1;
+	}
+
+}
+--------------------------------------------------------------------
+package Wednesday;
+import java.util.*;
+public class EmployeeName implements Comparator 
+{
+	@Override
+	public int compare(Object o1, Object o2)
+	{
+Employee ob1=(Employee) o1; //we are creating out own object and assigning it to the compare() Object o1 and o2
+Employee ob2=(Employee) o2;
+return 	ob1.name.compareTo(ob2.name);
+}
+}
+------------------------------------------------------------------------------
+package Wednesday;
+import java.util.*;
+public class EmployeeMain 
+{
+public static void main(String[] args)
+{
+ArrayList<Employee> al=new ArrayList<Employee>();
+al.add(new Employee(101,21,"Shubham"));
+al.add(new Employee(102,23,"Trupti"));
+al.add(new Employee(103,22,"Ajay"));
+al.add(new Employee(104,24,"Kiran"));
+
+//Sorting by age
+Collections.sort(al,new EmployeeAge());
+Iterator<Employee> itr=al.iterator();
+while(itr.hasNext())
+{
+	Employee emp=itr.next();
+	System.out.println(emp.age+"  "+emp.empno+"  "+emp.name);
+}
+System.out.println("***************************************************");
+//Sorting by name
+Collections.sort(al,new EmployeeName());
+Iterator<Employee> itr1=al.iterator();
+while(itr1.hasNext())
+{
+	Employee emp=itr1.next();
+	System.out.println(emp.age+"  "+emp.empno+"  "+emp.name);
+}
+}
+}
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+

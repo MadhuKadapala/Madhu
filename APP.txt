@@ -1,0 +1,711 @@
+<html>
+<body bgcolor=cyan>
+<h1>Student Registration Page</h1><hr>
+<form action="JspTest.jsp">
+<table>
+<tr><td>Enter StudID<td><input type=text name=t1 placeholder="enter studentID" size=20 required></tr>
+<tr><td>Enter Name<td><input type=text name=t2 placeholder="enter studentName" size=20 required></tr>
+<tr><td>Enter Address<td><input type=text name=t3 placeholder="enter studentAddress" size=20 required></tr>
+<tr><td><td><input type=submit value=Insert name=b1>
+<input type=submit value=Update name=b1>
+<input type=submit value=Delete name=b1>
+<input type=submit value=Select name=b1>
+</tr>
+</table>
+</form>
+</body>
+</html>
+-----------------------------------------------------------------
+<% String a=request.getParameter("t1");
+String b=request.getParameter("t2");
+String c=request.getParameter("t3");%>
+
+<%out.println("The Student Id is "+a);
+out.println("The Student name is "+b);
+out.println("The Student address is "+c);%>
+--------------------------------------------------------------------
+<%@page import="java.sql.*" %>
+<% String a=request.getParameter("t1");
+String b=request.getParameter("t2");
+String c=request.getParameter("t3");%>
+<h1><center>Student Details</center></h1><hr color=red><hr color=blue>
+<%out.println("The Student Id is "+a);%>
+<br>
+<% out.println("The Student name is "+b);
+out.println("<br>");
+out.println("The Student address is "+c);%>
+<% try
+{
+String driverclass="com.mysql.jdbc.Driver";
+	String url="jdbc:mysql://localhost:3306/sandip";
+	String username="root";
+	String password="1234";
+	Class.forName(driverclass);
+	Connection con=DriverManager.getConnection(url,username,password);
+	String x=request.getParameter("b1");
+	if(x.equals("Insert"))
+	{
+		PreparedStatement ps=con.prepareStatement("insert into student values(?,?,?)");
+		ps.setInt(1,Integer.parseInt(a));
+		ps.setString(2,b);
+		ps.setString(3,c);
+		ps.execute();
+		out.println("row inserted");
+	}
+	}
+	catch(Exception ae)
+	{
+		ae.printStackTrace();
+	}
+
+
+	%>
+
+---------------------------------------------------------------------------------
+    when we use Createstatement, when we use preparestatement??
+Createstatement :- static statement
+ preparestatement :- dynamic statement
+----------------------------------------------------------------------
+    when we use jsp file and when we use GUI
+servlet,JSP,spring boot,spring MVC
+
+------------------------------------------------------------------------------------------
+servlet and Jsp
+servlet is faster than JSP.
+JSP internally is converted to servlet.
+The code is less in JSP compared to servlet.
+Servlet are java files.where as JSP are webbased file.
+------------------------------------------------------------------------------------------
+<%@page import="java.sql.*" %>
+<% String a=request.getParameter("t1");
+String b=request.getParameter("t2");
+String c=request.getParameter("t3");%>
+<h1><center>Student Details</center></h1><hr color=red><hr color=blue>
+<%out.println("The Student Id is "+a);%>
+<br>
+<% out.println("The Student name is "+b);
+out.println("<br>");
+out.println("The Student address is "+c);%>
+<% try
+{
+String driverclass="com.mysql.jdbc.Driver";
+	String url="jdbc:mysql://localhost:3306/sandip";
+	String username="root";
+	String password="1234";
+	Class.forName(driverclass);
+	Connection con=DriverManager.getConnection(url,username,password);
+	String x=request.getParameter("b1");
+	if(x.equals("Insert"))
+	{
+		PreparedStatement ps=con.prepareStatement("insert into student values(?,?,?)");
+		ps.setInt(1,Integer.parseInt(a));
+		ps.setString(2,b);
+		ps.setString(3,c);
+		ps.execute();
+		out.println("row inserted");
+	}
+	if(x.equals("Select"))
+	{
+		out.println("<h2>Student Details<h2>");
+		out.println("<br><table cellspacing='0' cellpadding='5' border='1'>");
+		out.println("<tr><td><b>Student id<td><b>Student name<td><b>Address</tr></b>");
+		PreparedStatement ps=con.prepareStatement("select * from student order by studid");
+		ResultSet rs=ps.executeQuery();
+		while(rs.next())
+		{
+			out.println("<tr><td>"+rs.getString(1)+"</td>");
+			out.println("<td>"+rs.getString(2)+"</td>");
+			out.println("<td>"+rs.getString(3)+"</td></tr>");
+		}
+		
+	}
+	}
+	catch(Exception ae)
+	{
+		ae.printStackTrace();
+	}
+
+	%>
+----------------------------------------------------------------------------------------------------
+Servlet is a server side programming language.
+There are 2 types of servlet
+1)Generic Servlet(Protocal Independent)
+2)HttpServlet(Protocal dependent)
+-------------------------------------------------------------
+In the servlet we don't have the main()
+
+we have the lifecycle method for Generic Servlet.
+init():- This execute for one time .It is used to create the memory block.
+service() :- This execute for 'n' no of times .It accepts request and gives the response. 
+destroy():-This execute for one time .It is used to delete the  memory block. 
+------------------------------------------------------------------------------------
+HttpServlet it also don't have the main()
+
+we have the lifecycle method.
+init():-This execute for one time .It is used to create the memory block.
+service()/doGet()/doPost:-This execute for 'n' no of times .It accepts request and gives the response.
+destroy():-This execute for one time .It is used to delete the  memory block. 
+------------------------------------------------------------------------------------------------
+<form action="JspTest.jsp" method=get/post>
+by default it is get.we can see the data on the address bar.
+http://localhost:8090/MySqlDemo1/JspTest.jsp?t1=1001&t2=ajay&t3=Bangalore&b1=Insert
+in post we cannot see the data on the address bar.
+the data is secured.
+---------------------------------------------------------------------------------------------------------------------
+The internet works with HTTP protocal.
+so have cookies and session.
+we have methods like sendRedirect(),requestDispatcher().
+----------------------------------------------------------------------------------------------------------
+sendRedirect();
+--------------------------
+we will have a registration page and after registration it will redirect to login page.
+--------------------------------------------------register.html-------------------------------------------------------------
+Example :-
+<html>
+<body bgcolor=cyan>
+<h1>Student Registration Page</h1><hr>
+<form action="ServletRedirect" method="get">
+<table>
+<tr><td>Enter StudID<td><input type=text name=t1 size=20 required></tr>
+<tr><td>Enter Name<td><input type=text name=t2  size=20 required></tr>
+<tr><td>Enter Address<td><input type=text name=t3  size=20 required></tr>
+<tr><td>Enter password<td><input type=password name=t4  size=20 required></tr>
+<tr><td><td><input type=submit value=Submit></tr>
+</table>
+</form>
+</body>
+</html>
+--------------------------------------------------------------------------
+import java.io.*;
+import java.sql.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/ServletRedirect")
+public class ServletRedirect extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		PrintWriter pw=res.getWriter();
+		res.setContentType("text/html");
+		String a=req.getParameter("t1");
+		String b=req.getParameter("t2");
+		String c=req.getParameter("t3");
+		String d=req.getParameter("t4");
+		String driverclass="oracle.jdbc.driver.OracleDriver";
+		String url="jdbc:oracle:thin:@localhost:1521:xe";
+		String username="system";
+		String password="1234";
+	//	String sql="create table marlabsstud1 (studid number,name varchar2(30),address varchar2(30),password varchar2(30))";
+		String sql1="insert into marlabsstud1 values(?,?,?,?)";
+		try
+		{
+		Class.forName(driverclass);
+		Connection con=DriverManager.getConnection(url,username,password);
+		//PreparedStatement st=con.prepareStatement(sql);
+		//st.execute();
+		PreparedStatement st1=con.prepareStatement(sql1);
+		st1.setInt(1,Integer.parseInt(a));
+		st1.setString(2,b);
+		st1.setString(3,c);
+		st1.setString(4,d);
+		st1.execute();
+		res.sendRedirect("login.html");
+	}
+	catch(Exception ae)
+	{
+		ae.printStackTrace();
+	}
+	}
+}
+--------------------------------------------login.html-------------------------------------------------------
+<html>
+<body bgcolor=cyan>
+<h1>Student Login Page</h1><hr>
+<form action="Login" method="get">
+<table>
+<tr><td>Enter Name<td><input type=text name=t1  size=20 required></tr>
+<tr><td>Enter password<td><input type=password name=t2  size=20 required></tr>
+<tr><td><td><input type=submit value=submit></tr>
+</table>
+</form>
+</body>
+</html>
+-----------------------------------------------------------------------
+import java.io.*;
+import java.sql.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/Login")
+	public class Login extends HttpServlet 
+	{
+		public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+		{
+			PrintWriter pw=res.getWriter();
+			res.setContentType("text/html");
+			String a=req.getParameter("t1");
+			String b=req.getParameter("t2");
+			String driverclass="oracle.jdbc.driver.OracleDriver";
+			String url="jdbc:oracle:thin:@localhost:1521:xe";
+			String username="system";
+			String password="1234";
+				try
+			{
+			Class.forName(driverclass);
+			Connection con=DriverManager.getConnection(url,username,password);
+			PreparedStatement ps=con.prepareStatement("select * from marlabsstud1 where name=? and password=?");
+			ps.setString(1,a);
+			ps.setString(2,b);
+			ResultSet rs=ps.executeQuery();
+			int x=0;
+			while(rs.next())
+			{
+				x=1;
+			}
+			if(x==1)
+				res.sendRedirect("success.html");
+			else
+			 res.sendRedirect("login.html");
+		}
+		catch(Exception ae)
+		{
+			ae.printStackTrace();
+		}
+		}
+	}
+
+
+-----------------------------------------------------------------------------------------------------------
+<body>
+<h1>Login Success</h1>
+</body>
+-----------------------------------------------------
+Cookies and session
+-------------------------------
+Cookies are memory block created in the client system.
+example:- save the username/password of gmail.
+It is not secured.
+cookies and session both work together.
+example:- login to gmail,amazon .once you have logged in the system will use the username/password from the cookies and redirect to different pages.
+-----------------------------------------------------------------------------
+to add cookies
+---------------------------
+Cookie c=new Cookie(key,value);
+res.addCookie(c);
+-------------------------------------------------------------------------
+to get cookies
+----------------------------
+Cookie ck[]=req.getCookies();
+		for(int i=0;i<ck.length;i++)
+		{
+			String key=ck[i].getName();
+			String Value=ck[i].getValue();
+		}
+---------------------------------------------------
+session :- They are memory blocks created in the server.
+It is used when we do inter servlet communication.
+The servlets are stateless.
+In case of online shopping we use session.for storing data at the initial stage and retriving data at the final stage.
+we can call client connected to server a session is created.
+It maintain a sessionID.Under that id the data are stored.
+-----------------------------------------------------------------------------------------------------
+to create a new session
+-----------------------------------------
+HttpSession ses=req.getSession(true); //new session will be created
+
+ses.setAttribute("ob",name);
+ses.setAttribute("ob1",address);
+ses.setAttribute("ob2",email);
+
+HttpSession ses=req.getSession(false);//it will be under the same session id.
+
+String x=(String)ses.getAttribute("ob");
+String y=(String)ses.getAttribute("ob1");
+String z=(String)ses.getAttribute("ob2");
+-------------------------------------------session ------------------------------------------------------------------------
+Example:-
+<html>
+<body bgcolor=cyan>
+<h1>Customer Registration Page</h1><hr>
+<form action="Session1" method="get">
+<table>
+<tr><td>Enter Name<td><input type=text name=t1  size=20 required></tr>
+<tr><td>Enter Address<td><input type=text name=t2  size=20 required></tr>
+<tr><td>Enter Phoneno<td><input type=number name=t3 size=20 required></tr>
+<tr><td>Enter Email<td><input type=email name=t4  size=20 required></tr>
+<tr><td><td><input type=submit value=Submit></tr>
+</table>
+</form>
+</body>
+</html>
+------------------------------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/Session1")
+public class Session1 extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		res.setContentType("text/html");
+		PrintWriter pw=res.getWriter();
+		HttpSession ses=req.getSession(true);
+		String a=req.getParameter("t1");
+		String b=req.getParameter("t2");
+		String c=req.getParameter("t3");
+		String d=req.getParameter("t4");
+		ses.setAttribute("ob",a);
+		ses.setAttribute("ob1",b);
+		ses.setAttribute("ob2",c);
+		ses.setAttribute("ob3",d);
+		pw.println("<html>");
+		pw.println("<body bgcolor=cyan>");
+		pw.println("<form action=Session2 method=get>");
+		pw.println("Enter the product1 name :");
+		pw.println("<input type=text name=t5  size=20 required>");
+		pw.println("<br>");
+		pw.println("Enter the product1 price :");
+		pw.println("<input type=text name=t6  size=20 required>");
+		pw.println("<br>");
+		pw.println("<input type=submit value=Submit>");
+		pw.println("</body>");
+		pw.println("</form></html>");
+		}
+	}
+
+----------------------------------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/Session2")
+public class Session2 extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		res.setContentType("text/html");
+		PrintWriter pw=res.getWriter();
+		HttpSession ses=req.getSession(false);
+		String e=req.getParameter("t5");
+		String f=req.getParameter("t6");
+		ses.setAttribute("ob4",e);//session object
+		ses.setAttribute("ob5",f);
+		pw.println("<html>");
+		pw.println("<body bgcolor=cyan>");
+		pw.println("<form action=Session3 method=get>");
+		pw.println("Enter the product2 name :");
+		pw.println("<input type=text name=t7  size=20 required>");
+		pw.println("<br>");
+		pw.println("Enter the product2 price :");
+		pw.println("<input type=text name=t8  size=20 required>");
+		pw.println("<br>");
+		pw.println("<input type=submit value=Submit>");
+		pw.println("</body>");
+		pw.println("</form></html>");
+		}
+	}
+
+-------------------------------------------------------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/Session3")
+public class Session3 extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		res.setContentType("text/html");
+		PrintWriter pw=res.getWriter();
+		HttpSession ses=req.getSession(false);
+		String g=req.getParameter("t7");
+		String h=req.getParameter("t8");
+		ses.setAttribute("ob6",g);//session object stored into the session
+		ses.setAttribute("ob7",h);//servlet are stateless to make it stateful we are using session.
+		String x=(String)ses.getAttribute("ob");
+		String y=(String)ses.getAttribute("ob1");
+		String z=(String)ses.getAttribute("ob2");
+		String x1=(String)ses.getAttribute("ob3");
+		String y1=(String)ses.getAttribute("ob4");
+		String z1=(String)ses.getAttribute("ob5");
+		String y2=(String)ses.getAttribute("ob6");
+		String z2=(String)ses.getAttribute("ob7");
+		pw.println("<html>");
+		pw.println("<body bgcolor=cyan>");
+		pw.println("<h2>The Final Bill Of Amazon</h2><hr><br><br>");
+		pw.println("Name :"+x);pw.println("<br>");
+		pw.println("Address :"+y);pw.println("<br>");
+		pw.println("Phone no :"+z);pw.println("<br>");
+		pw.println("Email :"+x1);pw.println("<br>");
+		pw.println("Product Name :"+y1);pw.println("<br>");
+		pw.println("Price :"+z1);pw.println("<br>");
+		pw.println("Product Name :"+y2);pw.println("<br>");
+		pw.println("Price :"+z2);pw.println("<br>");
+		pw.println("<br><br>");
+		pw.println("Total Bill is  :"+(Integer.parseInt(z1)+Integer.parseInt(z2)));
+		pw.println("<br><br>");
+		pw.println("Thank you Visit Again...");
+			}
+	}
+---------------------------------------------------Cookies-------------------------------------------------
+
+<html>
+<body bgcolor=cyan>
+<h1>Add Cookies</h1><hr>
+<form action="AddCookies" method="get">
+<table>
+<tr><td>Enter Name<td><input type=text name=t1  size=20 required></tr>
+<tr><td>Enter Password<td><input type=text name=t2  size=20 required></tr>
+<tr><td><td><input type=submit value=Submit></tr>
+</table>
+</form>
+</body>
+</html>
+-----------------------------------------------------------------
+import java.io.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/AddCookies")
+public class AddCookies extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		res.setContentType("text/html");
+		PrintWriter pw=res.getWriter();
+		String key=req.getParameter("t1");
+		String value=req.getParameter("t2");
+		Cookie c=new Cookie(key,value);
+		res.addCookie(c);
+		pw.println("The key is :"+key);
+		pw.println("The value is :"+value);
+		pw.println("Cookies Added Successfully");
+		pw.close();
+}
+}
+-----------------------------------------------------------------------------
+<html>
+<body bgcolor=cyan>
+<h1>Get Cookies</h1><hr>
+<form action="GetCookies" method="get">
+<h1>Click the Button to view the Cookies</h1>
+<input type="submit" value="submit"/>
+</form>
+</body>
+</html>
+------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+
+@WebServlet("/GetCookies")
+public class GetCookies extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+	{
+		res.setContentType("text/html");
+		PrintWriter pw=res.getWriter();
+		pw.println("<html>");
+		pw.println("<h1>The Cookies Stored are</h1>");
+		Cookie ck[]=req.getCookies();
+		for(int i=0;i<ck.length;i++)
+		{
+			String key=ck[i].getName();
+			String Value=ck[i].getValue();
+			pw.println("the cookie key :"+key);
+			pw.println("the cookie value :"+Value);
+		}
+		pw.println("</html>");
+		
+}
+}
+--------------------------------------------------------------------------------------------------------------------------
+difference between sendRedirect() and RequestDispatcher
+----------------------------------------------------------------------------
+sendRedirect() will redirect to any servlet,html or JSP
+RequestDispatcher will redirect to any servlet or JSP along with the request comming from any html/jsp.
+*It will carry the request to the next page.
+--------------------------------------------------------------------------------------------------------
+
+RequestDispatcher :- 
+It is a Interface.
+It has 2 methods.
+1)public void forward(ServletRequest req,ServletResponse res)throws ServletException,IOException
+* it will forward to the next page(servlet/jsp) along with the request .
+
+
+2)public void include(ServletRequest req,ServletResponse res)throws ServletException,IOException
+* The present servlet and the next servlet output will be combined and displayed on the same page.
+example :- Login page failure stay on the same page.+failure message(included which is o/p of another file).
+--------------------------------------------------------------------------------------------------------------------------------------------
+<html>
+<body bgcolor=yellow>
+<form action=FirstPage method=get>
+<center><h1>Employee Registration Page</h1></center>
+<table>
+<tr><td>Enter Name<td><input type=text name=t1  size=20 required></tr>
+<tr><td>Enter Address<td><input type=text name=t2  size=20 required></tr>
+<tr><td>Enter Phoneno<td><input type=number name=t3 size=20 required></tr>
+<tr><td>Enter Email<td><input type=email name=t4  size=20 required></tr>
+<tr><td><td><input type=submit value=Submit></tr>
+</table>
+</form>
+</body>
+</html>
+-------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/FirstPage")
+public class FirstPage extends HttpServlet 
+{
+public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+{
+	RequestDispatcher rd=req.getRequestDispatcher("SecondPage");
+	rd.forward(req, res);
+}
+	
+}
+----------------------------------------------------------------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/SecondPage")
+public class SecondPage extends HttpServlet 
+{
+	public void doGet(HttpServletRequest req,HttpServletResponse res)
+	{
+		try
+		{
+			PrintWriter pw=res.getWriter();
+			res.setContentType("text/html");
+			String a=req.getParameter("t1");
+			String b=req.getParameter("t2");
+			String c=req.getParameter("t3");
+			String d=req.getParameter("t4");
+			pw.println("The name is :"+a);
+			pw.println("The address is :"+b);
+			pw.println("The phone no is :"+c);
+			pw.println("The email is :"+d);
+		}
+		catch(Exception ae)
+		{
+			ae.printStackTrace();
+		}
+	}
+}
+--------------------------------------------------------------------------------------------------------------------------
+Include:-
+-----------------
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/FirstPage")
+public class FirstPage extends HttpServlet 
+{
+public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+{
+	PrintWriter pw=res.getWriter();
+	res.setContentType("text/html");
+	pw.println("<h1>This is include Example</h1>");
+	pw.println("<br>");
+	RequestDispatcher rd=req.getRequestDispatcher("SecondPage");
+	rd.include(req, res);
+}
+	
+}
+------------------------------------------------------------------------------------------------------------
+DAO layer:-Data access Object
+
+1)Connection Object
+2)handle user defined error
+3)DAO interface
+i)addPerson() ii)getPerson() iii)updatePerson()  iv)deletePerson()
+4)DAO implementation
+5)Testing the DAO implementation
+i)addPerson.java
+ii)getOnePerson.java
+iii)getAllPerson.java
+iv)DeletePerson.java
+------------------------------------------------------------------------
+addPerson
+step 1:- Person class :-getter,setter,constructor parameterized,default,toString().
+step 2:-PersonDao dao=new JdbcPersonDao();
+		dao.addPerson(person);
+--------------------------------------------------------------------------------------------------------------------
+create table person(id number, firstname varchar2(30),lastname varchar2(30),phone varchar2(30),email varchar2(30))
+-------------------------------
+updatePerson
+getPersonByPhone
+
+------------------------------------------Flow of Servlet Crud ---------------------------------------------------------------
+EmployeeReg.html :-Enter the data from the frontend.
+step 1:-<form action="SaveServlet" method=get>  ----------to save the data
+step 2:-<a href="ViewServlet">View Employee</a>---------to view the data
+--------------------------------------------------------------------------
+SaveServlet :-Insert query
+ViewServlet:-select query
+-------------------------------------------
+ViewServlet
+<a href='EditServlet?id="+e.getId()+"'>Edit</a></td>
+<td><a href='DeleteServlet?id="+e.getId()+"'>Delete</a>
+------------------------------------------------------------------------------
+
+add 2 more columns 
+phoneno
+project name
+----------------------------------------------------------------------------------------------------------
+https://www.w3schools.com/bootstrap/
+create an application on covid-19 create it using bootstrap
+home page
+1)registration
+2)check for doctors avability
+3)book a bed
+4)book an ambulance
+5)give feedback 
+-----------------------------------------------
+group-1
+--------------
+Abhilasha,afreenbanu,amrute
+----------------------------------------------------
+group-2
+-------------
+Dileep,geethanjali,Madhusudhan
+--------------------------------------------------------------
+group-3
+--------------
+Amajad,mohit,shohaib
+---------------------------------------------------------------------
+group-4
+----------------
+subham,rohit,shilpa,trupti
+------------------------------------------------------------------------------------
+Servlet/hibernate
+admin :- see the report which will be in JSTL.
+use a template to design it.
+---------------------------------------------------------
+download a template  
+https://www.free-css.com/free-css-templates
+-----------------------------------------------------------------------
+admin login :- username/password will be admin/admin
+---------------------------------------------------------------------------
+redirecting to report page.
+-----------------------------------------------------------------------
+<a href=book.jsp>Booking Details</a>
+
+<a href=search.jsp>Searching Details</a>
+-----------------------------------------------------------------------
+
+
+
+
+
+
+
+
